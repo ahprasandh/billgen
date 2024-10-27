@@ -323,7 +323,7 @@
                         .then((dataUrl) => {
                             this.downloads.push({ url: dataUrl, name: name });
                             this.toasts.push({con:"Bill generated"})
-                            // setTimeout(()=>this.toasts.shift(),2000);
+                            setTimeout(()=>this.toasts.shift(),2000);
                         })
                         .catch(function (error) {
                             this.toasts.push({con:"Oops, Something went wrong!",mode:'err'})
