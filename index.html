@@ -346,13 +346,11 @@
                         .then((dataUrl) => {
                             this.downloads.push({ url: dataUrl, name: name, type: "driver" });
                             this.toasts.push({ con: "Bill generated" })
-                            this.showDriver=false
                             setTimeout(() => this.toasts.shift(), 2000);
                         })
                         .catch(function (error) {
                             this.toasts.push({ con: "Oops, Something went wrong!", mode: 'err' })
                             setTimeout(() => this.toasts.shift(), 2000);
-                            this.showDriver=false
                             console.error(error);
                         });
                 },
