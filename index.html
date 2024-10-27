@@ -36,10 +36,35 @@
                     </div>
                 </template>
             </div>
+            <div v-if="showDriver" class="downloads" @click="showDriver=false">
+                <button class="closeBut" @click.stop="showDriver=false">X</button>
+                <button class="glow genBut" @click.stop="generateDriver">Generate Receipt</button>
+                <button class="down genBut viewBil" :class="{available:toasts.length!==0}" @click="showDownloads=true">View Bills ({{downloads.length}})</button>
+                <div id="driver_cont" class="driver" @click.stop="">
+                    <h1>Receipt</h1>
+                    I <span class="hwWrap driverName"> <input class="hw" v-model="driver.name"/></span> recieved a sum of Rs <span class="hwWrap driverAmt"> <input class="hw" v-model="driver.amt"/></span> <br />
+                    ((Rupees <span class="hwWrap driverAmtText"> <input class="hw" v-model="driver.amtTxt"/></span>)) from <br />
+                    <span class="hwWrap driverOwner"> <input class="hw" v-model="driver.owner"/></span> as driver for the month of <span class="hwWrap driverMonth"> <input class="hw" v-model="driver.month"/></span>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    Place:<span class="driverPlace"> <input class="hw" v-model="driver.place"/></span><br/>
+                    Date:<span class=" driverDate"> <input class="hw"v-model="driver.date" /></span>
+                    <span class="signature">
+                        <input class="hw signInp" v-model="driver.sign" />
+                        <img class="stamp" src="./static/images/stamp.jpg" /><br/>
+                        Signature<br />(*Revenue Stamp)
+                    </span>
+                </div>
+            </div>
             <div class="editor">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Bunk Details
                         <div class="buttonWrap">
+                            <button class="glow" @click="showDriver=true">Driver receipt</button>
                             <button class="down" @click="randomize">Randomize</button>
                             <button class="glow" @click="generate">Generate Bill</button>
                             <button class="down" :class="{available:toasts.length!==0}" @click="showDownloads=true">View Bills ({{downloads.length}})</button>
@@ -139,6 +164,17 @@
                 return {
                     toasts: [
                     ],
+                    showDriver: false,
+                    driver:{
+                        name:"P.Kumaran",
+                        amt:"10,000",
+                        amtTxt:"Ten Thousand",
+                        owner:"A. Hari Prasandh",
+                        month:"Oct 2024",
+                        place:"Chennai",
+                        date:"29/01/24",
+                        sign:"Kuma___"
+                    },
                     topMsg: "Welcomes You",
                     footer: "Thank You! Please Visit Again..",
                     font: "thermal",
@@ -239,8 +275,8 @@
                 this.changeBunk(this.logoOptions[0].key)
             },
             methods: {
-                getToastIcon(mode='suc'){
-                    return mode==='err'?'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFCUlEQVR4nO2XfUxVZRzHH835ssZKp7X0D6OcNavVlnAV7onFGhdf4AJK82ViMW0EDYHexhR1uAhfmJFOM/E8vJ8DVwh7MVuSwLQQZzAQuOcBIp2tmokTWSzknm87Bzhe7wtcbpcuOH7bd7s7d+f5fT/P73n5HUImYzImYzLcCUSTh8CR3WQiBkLJDHDkC3Ckg0y0QBCZCT05A44AesLIBFw2JtX8gLrIRApw5IiV+QEtJwvJRAhw5A0785y6jBLJeA8EkufAkb+dAHRiCZlu9w5H/KEnm7zj2NoIIVPAkXMOzXMaxEGbd6aCI+ehJ3cQQJ7xnvuBmdxsbVZOngNsetgRxB4EkWmDGz3T6r/vvT37Zs3Mimmw1L0E+YSvs2rcBEf+dAAX6h0AjgTfN/tZC2Ax+8HSvBSImuF8SdkDnPEOgJ5QzcSrU9TZVwHMfpCFRaMB6AdHnvAGANNmf4uPZl6DSJ3r1LScOs/22RqPGcsTWhbTYimRikzkBVZPBXaTiqyPF6R+XpS6eJG18iI7/fN72/p+X7cMd4NnQd4/3w7A0vgy5LcfsTe/fR4sPzxvW4Xt/8n0rl2YeqKYraUCq6Miw2iUV9SMs0Ierl6Mw12z7n6IFj/Ix5+E/M6jkFPmQDYtHqgOfcoWIN1t87zYZqCC1DRk6GhuA1I/EhCTsAerNyYgyLgeASuiELgqGk8vWoRnl7yAdW/tQHJaDvYeqgRfbNZgxLI6NNXsRF9LoH1FrJdX0mzbyiSM2nhp6bVZvMgO84IkK8mzj9diU3w6lq9cA53B6FC+vr6qrJ8FhW/A1pQDyDpao4GUlF0E+/FdWMz+9gA/vQgET7UFCBiV+fz89seoyC4pyY4XXkHc+9kIWLnWqfHhAKy1NvYD7D1cqYGc+aYctxtXDL+59eSacju7bD6nuHU+FSWmJDh0og6r1sePaNxVAEXLQiOwMW4XjtDLKkSRqV7dH6p53sElpyfxrpuvaPWhAmsYmiFjzDaXzbsKMKRXwtZjR6ZJzZNbYkYTTVHvCxuAKqW9cBmAClKB9QmS8OHhMQPQDWprShZ4UVLzleZUo2rPQUhxr6N75YLrI15g2afZDFrcFsoL7FMqSG22R2DWZzVjDqAzGBGTkO7sGK6lIks6VmSe6xCAF1j1aM/14ZSacUmVJ8fMK+9AfsUvvbllHTS/1OxrAzBwRI5ngIr2Xnz1W7+qio5e2VR/61t6rnOmCoDHX4MjNW7YN24A8r/+Fac6/9EgFJU19/yRc/6Gjx1A38LVkCJ348v9Z8cNAFWWkakdJbU3cOrqPZCTDbcuaAB/LY3FhUQehbmN424JUSvllrSh6LvrMF3uQrm5p494OsFYA1AbPdgAaZknERGTBP2qaFWRm5Oxc2/ZmAGkuZHPKcCW5APD3pyeBtjiZj6H94AyEyPdnGn7yj0GkOZ2Psmi9D5Vtn9YN3CRsfHI+LxQVUTsva40YnOyxwCMbuZTPltJaemV6bkCC+FF6WO1rRBYt7L+hl5UBvqksFxVxrEC7Xng6miPAehdyydTgZmpyCqpyPYrn7dKH+ewP9KFGntGGlBniOguKro6210p39hkMPwN4XdGzBdivO1yS60zGKu10iklPVagKuLNeyX1Dwk/5/KA/3c+nSEsaqRN5W8IM3oOIMzz+fxDjFlOBwwx7vOU+THN5xcaHqmUTmdQ90SP8tuTM+/tfJMxGeQBiH8BcsuAr0Vop+IAAAAASUVORK5CYII=':'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEOklEQVR4nO2bXUhTYRjH3znbR4oZmZDhyOWmq5yaZm4nNDBFLKEvurNuJIKiqIvsvqIPKIMu6iYjKIKKnEURgX04RKupN0H0ddnwpswZbTuHeuJ9d45s85xtuHPWeXf2wB/Oed/njOf5ned9zsc2hHKWMykbRQiByuRFGTSgRN8QQucRQgZFAAQCAVUoBRDnNQEgNGWP0YuB8uhKUA4AWmSJyn18PACsKP8cADkNxM6Az+cjEvb9fj+R1LzcxyeRpgGMaAWAYIqcddU3wfj4YiJGaAAhtB8hpEcaBLAlauyTHCAgOoD/rRQA6PmkP8nVF4AyAPEg0u4RIAZAqjSl9uU6fhFNMAcAKVEBAfUvAWUrIKA1AEh9SpbgqFwvUoAiAKm8vVocAM7DqEJJACxIWI5HZaAQAJIdAFKfMgbAq4Jk4zWSSQDRFvOhmVKS4BMCSFA5WQ/Am6Rysh6AYLKcecFyABAdFSD72qcFQKIr1v8FcL+/DB5cKVMawGLmlQfwy2cDh9UA9jUGmHtn0x6ASydL55O43FeqLQDTI5Wwolg/n0RxkR78r9ZqB8CxnuXkmJKSEiK8jceoBhAcW/cxlcA/PK4A4xId6HQ6aGlpgdbWVrJtWKKD90Nr6AXAPWnyphL4zrZC4m+xWKC7u5uovDzyPf6utkJ6AbAehg29dXxLFPTrWxbQ6RDk5+dDe3v7PICOjg4yhj9n+EY5nQA4/HLiWdMrqYCDk3ZoXG8ivlVVVfPJC8JjeK6u2gi/JygFwA66f4V91dNiAd++sIr4mc0m6OrqWgAAj5lMEUB3Lq6iEwCH9XTziFjAW5uWEr8WV/WC5AXV1NQQn7bmpfQCYD3Mn/D4ug/xAS8rzCN+B/Y1SgLAfQH7LC/S0wuAw3rkngxO2v9GB2w26iJrvK4OThxqFQXQ2dlJfArMeZQD8DAQGq6PWQpOu5H4VVZWQkNDAxzsaYYjvdtg754dsHf3djjc2wYdWyONcKPDRD8AdpAJRF8WzxyN3PHhRoerAEOIFh4TmuC54yvpB8BhPXZNBCfsf3DAP8Zs5MlPgGC1WsHpdBLhbSH56goDzIzbsgSAhwH2eeNLIeiPTypggy2yFMRUYzMSH3pvhDwiAAaZv+HXteNC4D/f2KC/rxSaa81QVJBH5Kozk7HZN6m/F6AGAEcuje6Z0DvH11STyzoAHIYw5PYne1bIagAckftzyFc1o2EADLCPXO/lgEAtAA5ryPVF6qFJGwA8ZDl8TacnZAEABsKD7u+h0Q1TCgCY4+fKROZW83Oz2fyvsZf8WJ9I7Kf4ueF0AIBKJVg3vx/mIZTx6uPH8Nz2tAEEr1pidW0thG6uh/DdemAfuhT/bZAgieVwNgGo0+kkLw0gXtetEB5wAHvbCey9TZkGgG0HQugF3xPm+LJP68wLpvYloLh5VZCs4v8LyhnSuP0DuADD/5V/7JQAAAAASUVORK5CYII='
+                getToastIcon(mode = 'suc') {
+                    return mode === 'err' ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFCUlEQVR4nO2XfUxVZRzHH835ssZKp7X0D6OcNavVlnAV7onFGhdf4AJK82ViMW0EDYHexhR1uAhfmJFOM/E8vJ8DVwh7MVuSwLQQZzAQuOcBIp2tmokTWSzknm87Bzhe7wtcbpcuOH7bd7s7d+f5fT/P73n5HUImYzImYzLcCUSTh8CR3WQiBkLJDHDkC3Ckg0y0QBCZCT05A44AesLIBFw2JtX8gLrIRApw5IiV+QEtJwvJRAhw5A0785y6jBLJeA8EkufAkb+dAHRiCZlu9w5H/KEnm7zj2NoIIVPAkXMOzXMaxEGbd6aCI+ehJ3cQQJ7xnvuBmdxsbVZOngNsetgRxB4EkWmDGz3T6r/vvT37Zs3Mimmw1L0E+YSvs2rcBEf+dAAX6h0AjgTfN/tZC2Ax+8HSvBSImuF8SdkDnPEOgJ5QzcSrU9TZVwHMfpCFRaMB6AdHnvAGANNmf4uPZl6DSJ3r1LScOs/22RqPGcsTWhbTYimRikzkBVZPBXaTiqyPF6R+XpS6eJG18iI7/fN72/p+X7cMd4NnQd4/3w7A0vgy5LcfsTe/fR4sPzxvW4Xt/8n0rl2YeqKYraUCq6Miw2iUV9SMs0Ierl6Mw12z7n6IFj/Ix5+E/M6jkFPmQDYtHqgOfcoWIN1t87zYZqCC1DRk6GhuA1I/EhCTsAerNyYgyLgeASuiELgqGk8vWoRnl7yAdW/tQHJaDvYeqgRfbNZgxLI6NNXsRF9LoH1FrJdX0mzbyiSM2nhp6bVZvMgO84IkK8mzj9diU3w6lq9cA53B6FC+vr6qrJ8FhW/A1pQDyDpao4GUlF0E+/FdWMz+9gA/vQgET7UFCBiV+fz89seoyC4pyY4XXkHc+9kIWLnWqfHhAKy1NvYD7D1cqYGc+aYctxtXDL+59eSacju7bD6nuHU+FSWmJDh0og6r1sePaNxVAEXLQiOwMW4XjtDLKkSRqV7dH6p53sElpyfxrpuvaPWhAmsYmiFjzDaXzbsKMKRXwtZjR6ZJzZNbYkYTTVHvCxuAKqW9cBmAClKB9QmS8OHhMQPQDWprShZ4UVLzleZUo2rPQUhxr6N75YLrI15g2afZDFrcFsoL7FMqSG22R2DWZzVjDqAzGBGTkO7sGK6lIks6VmSe6xCAF1j1aM/14ZSacUmVJ8fMK+9AfsUvvbllHTS/1OxrAzBwRI5ngIr2Xnz1W7+qio5e2VR/61t6rnOmCoDHX4MjNW7YN24A8r/+Fac6/9EgFJU19/yRc/6Gjx1A38LVkCJ348v9Z8cNAFWWkakdJbU3cOrqPZCTDbcuaAB/LY3FhUQehbmN424JUSvllrSh6LvrMF3uQrm5p494OsFYA1AbPdgAaZknERGTBP2qaFWRm5Oxc2/ZmAGkuZHPKcCW5APD3pyeBtjiZj6H94AyEyPdnGn7yj0GkOZ2Psmi9D5Vtn9YN3CRsfHI+LxQVUTsva40YnOyxwCMbuZTPltJaemV6bkCC+FF6WO1rRBYt7L+hl5UBvqksFxVxrEC7Xng6miPAehdyydTgZmpyCqpyPYrn7dKH+ewP9KFGntGGlBniOguKro6210p39hkMPwN4XdGzBdivO1yS60zGKu10iklPVagKuLNeyX1Dwk/5/KA/3c+nSEsaqRN5W8IM3oOIMzz+fxDjFlOBwwx7vOU+THN5xcaHqmUTmdQ90SP8tuTM+/tfJMxGeQBiH8BcsuAr0Vop+IAAAAASUVORK5CYII=' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEOklEQVR4nO2bXUhTYRjH3znbR4oZmZDhyOWmq5yaZm4nNDBFLKEvurNuJIKiqIvsvqIPKIMu6iYjKIKKnEURgX04RKupN0H0ddnwpswZbTuHeuJ9d45s85xtuHPWeXf2wB/Oed/njOf5ned9zsc2hHKWMykbRQiByuRFGTSgRN8QQucRQgZFAAQCAVUoBRDnNQEgNGWP0YuB8uhKUA4AWmSJyn18PACsKP8cADkNxM6Az+cjEvb9fj+R1LzcxyeRpgGMaAWAYIqcddU3wfj4YiJGaAAhtB8hpEcaBLAlauyTHCAgOoD/rRQA6PmkP8nVF4AyAPEg0u4RIAZAqjSl9uU6fhFNMAcAKVEBAfUvAWUrIKA1AEh9SpbgqFwvUoAiAKm8vVocAM7DqEJJACxIWI5HZaAQAJIdAFKfMgbAq4Jk4zWSSQDRFvOhmVKS4BMCSFA5WQ/Am6Rysh6AYLKcecFyABAdFSD72qcFQKIr1v8FcL+/DB5cKVMawGLmlQfwy2cDh9UA9jUGmHtn0x6ASydL55O43FeqLQDTI5Wwolg/n0RxkR78r9ZqB8CxnuXkmJKSEiK8jceoBhAcW/cxlcA/PK4A4xId6HQ6aGlpgdbWVrJtWKKD90Nr6AXAPWnyphL4zrZC4m+xWKC7u5uovDzyPf6utkJ6AbAehg29dXxLFPTrWxbQ6RDk5+dDe3v7PICOjg4yhj9n+EY5nQA4/HLiWdMrqYCDk3ZoXG8ivlVVVfPJC8JjeK6u2gi/JygFwA66f4V91dNiAd++sIr4mc0m6OrqWgAAj5lMEUB3Lq6iEwCH9XTziFjAW5uWEr8WV/WC5AXV1NQQn7bmpfQCYD3Mn/D4ug/xAS8rzCN+B/Y1SgLAfQH7LC/S0wuAw3rkngxO2v9GB2w26iJrvK4OThxqFQXQ2dlJfArMeZQD8DAQGq6PWQpOu5H4VVZWQkNDAxzsaYYjvdtg754dsHf3djjc2wYdWyONcKPDRD8AdpAJRF8WzxyN3PHhRoerAEOIFh4TmuC54yvpB8BhPXZNBCfsf3DAP8Zs5MlPgGC1WsHpdBLhbSH56goDzIzbsgSAhwH2eeNLIeiPTypggy2yFMRUYzMSH3pvhDwiAAaZv+HXteNC4D/f2KC/rxSaa81QVJBH5Kozk7HZN6m/F6AGAEcuje6Z0DvH11STyzoAHIYw5PYne1bIagAckftzyFc1o2EADLCPXO/lgEAtAA5ryPVF6qFJGwA8ZDl8TacnZAEABsKD7u+h0Q1TCgCY4+fKROZW83Oz2fyvsZf8WJ9I7Kf4ueF0AIBKJVg3vx/mIZTx6uPH8Nz2tAEEr1pidW0thG6uh/DdemAfuhT/bZAgieVwNgGo0+kkLw0gXtetEB5wAHvbCey9TZkGgG0HQugF3xPm+LJP68wLpvYloLh5VZCs4v8LyhnSuP0DuADD/5V/7JQAAAAASUVORK5CYII='
                 },
                 randomize() {
                     for (let i = 0; i < this.billOptions.length; i++) {
@@ -268,6 +304,10 @@
                         }
                     }
                     this.address = this.deepClone(this.addressOptions[this.generateRandomNum(0, 3, 0)]);
+                    let date = new Date();
+                    let month = date.toLocaleString('default', { month: 'short' });
+                    let year = date.toLocaleString('default', { year: 'numeric' });
+                    this.driver.month = `${month} ${year}`;
                 },
                 generateRandomNum(start = 1, end = 1000000, stringToLength = 8) {
                     let x = Math.floor((Math.random() * end) + start);
@@ -299,6 +339,23 @@
                     var dt = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
                     return dt;
                 },
+                generateDriver(){
+                    let name = `${this.driver.month}.png`;
+                    var node = document.getElementById('driver_cont');
+                    domtoimage.toPng(node)
+                        .then((dataUrl) => {
+                            this.downloads.push({ url: dataUrl, name: name, type: "driver" });
+                            this.toasts.push({ con: "Bill generated" })
+                            this.showDriver=false
+                            setTimeout(() => this.toasts.shift(), 2000);
+                        })
+                        .catch(function (error) {
+                            this.toasts.push({ con: "Oops, Something went wrong!", mode: 'err' })
+                            setTimeout(() => this.toasts.shift(), 2000);
+                            this.showDriver=false
+                            console.error(error);
+                        });
+                },
                 generate() {
                     var date; var amt;
                     for (let i = 0; i < this.billOptions.length; i++) {
@@ -321,13 +378,13 @@
                     var node = document.getElementById('image_cont');
                     domtoimage.toPng(node)
                         .then((dataUrl) => {
-                            this.downloads.push({ url: dataUrl, name: name });
-                            this.toasts.push({con:"Bill generated"})
-                            setTimeout(()=>this.toasts.shift(),2000);
+                            this.downloads.push({ url: dataUrl, name: name, type: "pet" });
+                            this.toasts.push({ con: "Bill generated" })
+                            setTimeout(() => this.toasts.shift(), 2000);
                         })
                         .catch(function (error) {
-                            this.toasts.push({con:"Oops, Something went wrong!",mode:'err'})
-                            setTimeout(()=>this.toasts.shift(),2000);
+                            this.toasts.push({ con: "Oops, Something went wrong!", mode: 'err' })
+                            setTimeout(() => this.toasts.shift(), 2000);
                             console.error(error);
                         });
                 },
