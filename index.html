@@ -308,6 +308,7 @@
                     let month = date.toLocaleString('default', { month: 'short' });
                     let year = date.toLocaleString('default', { year: 'numeric' });
                     this.driver.month = `${month} ${year}`;
+                    this.driver.date = this.formatDate(date)
                 },
                 generateRandomNum(start = 1, end = 1000000, stringToLength = 8) {
                     let x = Math.floor((Math.random() * end) + start);
