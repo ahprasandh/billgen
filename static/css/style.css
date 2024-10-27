@@ -157,6 +157,13 @@ table {
   font-style: normal;
 }
 
+@font-face {
+  font-family: "QECarlone";
+  src: url("../fonts/QECarolineMutiboko.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body .thermal {
   font-family: Thermal-Receipt;
   font-size: 15px;
@@ -260,7 +267,7 @@ body .press {
   line-height: 1.42857143;
   background: var(--bg-color);
   color: var(--color);
-  accent-color:var(--color-theme5);
+  accent-color: var(--color-theme5);
   background-image: none;
   border: 1px solid var(--bg-high-color);
   outline: none;
@@ -274,7 +281,7 @@ body .press {
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
 }
 
-.form-input:focus{
+.form-input:focus {
   background-color: var(--bg-high-color);
 }
 
@@ -550,7 +557,7 @@ body .press {
   border-width: .125rem;
   box-sizing: border-box;
   background: var(--bg-high-color);
-    color: var(--color);
+  color: var(--color);
   cursor: pointer;
   display: inline-block;
   letter-spacing: -.01em;
@@ -622,11 +629,12 @@ body .press {
 
 .downBut {
   background: var(--bg-high-color);
-    transition: all 0.4s ease;
-    padding: 5px;
-    line-height: 2;
-    color: var(--color);
-    text-decoration: none;
+  transition: all 0.4s ease;
+  padding: 5px;
+  line-height: 2;
+  color: var(--color);
+  text-decoration: none;
+  border: none;
 }
 
 .downBut:hover {
@@ -655,4 +663,110 @@ body .press {
 .toast .toastImg {
   height: 24px;
   margin-right: 10px;
+}
+
+.driver {
+  font-family: 'Times New Roman', Times, serif;
+  height: 842px;
+  width: 595px;
+  background-color: #fff;
+  color: #000;
+  background-image: url(../images/texture.avif);
+  background-repeat: round;
+  position: relative;
+  background-size: cover;
+  padding: 50px 75px;
+}
+
+.driver h1 {
+  font-weight: bold;
+  justify-content: center;
+  display: flex;
+  padding: 0 0 50px 0;
+  font-size: 17px;
+}
+
+.genBut {
+  position: absolute;
+  right: 60px;
+  top: 10px;
+}
+
+.genBut.viewBil{
+  right: 180px;
+}
+
+.hwWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.hwWrap:after {
+  position: absolute;
+  width: inherit;
+  height: 1px;
+  background: #333;
+  content: '';
+  left: 0;
+  bottom: 6;
+}
+
+.hw {
+  width: inherit;
+  font-family: QECarlone;
+  font-size: 16px;
+  background: none;
+  outline: none;
+  border: none;
+  padding: 0 20px;
+  color: #18226E;
+}
+
+.driverName {
+  width: 300px;
+}
+
+.driverAmt {
+  width: 150px;
+}
+
+.driverAmtText {
+  width: 494px;
+}
+
+.driverOwner {
+  width: 270px;
+}
+
+.driverMonth {
+  width: 150px;
+}
+
+.driverPlace {
+  width: 300px;
+}
+
+.driverDate {
+  width: 300px;
+}
+
+.signature {
+  position: absolute;
+  right: 70px;
+  top: 195px;
+}
+
+.signature .stamp {
+  height: 70px;
+}
+
+.signature .signInp {
+  position: relative;
+    font-size: 18px;
+    top: 50px;
+    right: 10px;
+    display: block;
+    padding: 0;
+    transform: rotate(-7deg);
+    width: 100px;
 }
