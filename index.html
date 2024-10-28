@@ -15,7 +15,22 @@
 </head>
 
 <body>
-    <div id="app" class="night">
+    <div id="app" class="app night">
+
+
+
+        <section class="headband">
+            <div class="card tabs">
+                <input id="tab-1" type="radio" class="tab tab-selector" v-model="tab" name="tab" value="fuel" />
+                <label for="tab-1" class="tab tab-primary">Fuel Bill</label>
+                <input id="tab-4" type="radio" class="tab tab-selector" v-model="tab" name="tab" value="driver"/>
+                <label for="tab-4" class="tab tab-success">Driver Receipt</label>
+                <div class="glider"></div>
+            </div>
+            
+            <button class="glow genBut" @click.stop="tab=='driver'?generateDriver():generate()">Generate Receipt</button>
+            <button class="down genBut viewBil" :class="{available:toasts.length!==0}" @click="showDownloads=true">View Bills ({{downloads.length}})</button>
+        </section>
         <section class="wrapper" :class="[font]">
             <div class="toastMsgContainer">
                 <div v-for="msg in toasts" class="toast">
@@ -36,123 +51,119 @@
                     </div>
                 </template>
             </div>
-            <div v-if="showDriver" class="downloads" @click="showDriver=false">
-                <button class="closeBut" @click.stop="showDriver=false">X</button>
-                <button class="glow genBut" @click.stop="generateDriver">Generate Receipt</button>
-                <button class="down genBut viewBil" :class="{available:toasts.length!==0}" @click="showDownloads=true">View Bills ({{downloads.length}})</button>
+            <div v-if="tab=='driver'" class="driverBill">
                 <div id="driver_cont" class="driver" @click.stop="">
                     <h1>Receipt</h1>
-                    I <span class="hwWrap driverName"> <input class="hw" v-model="driver.name"/></span> recieved a sum of Rs <span class="hwWrap driverAmt"> <input class="hw" v-model="driver.amt"/></span> <br />
-                    ((Rupees <span class="hwWrap driverAmtText"> <input class="hw" v-model="driver.amtTxt"/></span>)) from <br />
-                    <span class="hwWrap driverOwner"> <input class="hw" v-model="driver.owner"/></span> as driver for the month of <span class="hwWrap driverMonth"> <input class="hw" v-model="driver.month"/></span>
+                    I <span class="hwWrap driverName"> <input class="hw" v-model="driver.name" /></span> recieved a sum of Rs <span class="hwWrap driverAmt"> <input class="hw" v-model="driver.amt" /></span> <br />
+                    (Rupees <span class="hwWrap driverAmtText"> <input class="hw" v-model="driver.amtTxt" /></span>) from <br />
+                    <span class="hwWrap driverOwner"> <input class="hw" v-model="driver.owner" /></span> as driver for the month of <span class="hwWrap driverMonth"> <input class="hw" v-model="driver.month" /></span>
                     <br />
                     <br />
                     <br />
                     <br />
                     <br />
                     <br />
-                    Place:<span class="driverPlace"> <input class="hw" v-model="driver.place"/></span><br/>
-                    Date:<span class=" driverDate"> <input class="hw"v-model="driver.date" /></span>
+                    Place:<span class="driverPlace"> <input class="hw" v-model="driver.place" /></span><br />
+                    Date:<span class=" driverDate"> <input class="hw" v-model="driver.date" /></span>
                     <span class="signature">
                         <input class="hw signInp" v-model="driver.sign" />
-                        <img class="stamp" src="./static/images/stamp.jpg" /><br/>
+                        <img class="stamp" src="./static/images/stamp.jpg" /><br />
                         Signature<br />(*Revenue Stamp)
                     </span>
                 </div>
             </div>
-            <div class="editor">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Bunk Details
-                        <div class="buttonWrap">
-                            <button class="glow" @click="showDriver=true">Driver receipt</button>
-                            <button class="down" @click="randomize">Randomize</button>
-                            <button class="glow" @click="generate">Generate Bill</button>
-                            <button class="down" :class="{available:toasts.length!==0}" @click="showDownloads=true">View Bills ({{downloads.length}})</button>
+            <template v-else-if="tab=='fuel'">
+                <div class="editor">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Bunk Details
+                            <div class="buttonWrap">
+                                <button class="down" @click="randomize">Randomize</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <span>Bunk</span>
-                            <select class="form-input" v-model="logo">
-                                <option v-for="opt in logoOptions" :value="opt.value">{{opt.name}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <span>Bank Logo</span>
-                            <input type="checkbox" class="form-input" name="machine" v-model="bankPrint">
-                        </div>
-                        <div class="form-group">
-                            <span>Font</span>
-                            <select class="form-input" v-model="font">
-                                <option v-for="opt in fontOptions" :value="opt.value">{{opt.name}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <span>Message</span>
-                            <input type="text" class="form-input" v-model="topMsg">
-                        </div>
-                        <div class="form-group">
-                            <span>Footer</span>
-                            <input type="text" class="form-input" v-model="footer">
-                        </div>
-                        <template v-for="line,i in address">
+                        <div class="panel-body">
                             <div class="form-group">
-                                <span>Address Line {{i}}</span>
-                                <input type="text" class="form-input" v-model="line">
-                                <div class="changeWrap">
-                                    <span class="changeIco" @click="address.splice(0,1)">-</span>
-                                    <span class="changeIco" @click="address.splice(i+1,0,'')">+</span>
-                                </div>
+                                <span>Bunk</span>
+                                <select class="form-input" v-model="logo">
+                                    <option v-for="opt in logoOptions" :value="opt.value">{{opt.name}}</option>
+                                </select>
                             </div>
-                        </template>
-                    </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Enter Data</div>
-                    <div class="panel-body">
-                        <template v-for="inp,i in billOptions">
-                            <div v-if="inp.name.length>0" class="form-group">
-                                <input type="text" class="form-label" v-model="inp.name" />
-                                <input type="text" class="form-input" v-model="inp.value" :class="[{disabled:inp.key=='amount'}]" :disabled="inp.key=='amount'">
-                                <div class="changeWrap">
-                                    <span class="changeIco" @click="billOptions.splice(i,1)">-</span>
-                                    <span class="changeIco" @click="billOptions.splice(i+1,0,{name:'Key',value:''})">+</span>
-                                </div>
+                            <div class="form-group">
+                                <span>Bank Logo</span>
+                                <input type="checkbox" class="form-input" name="machine" v-model="bankPrint">
                             </div>
-                        </template>
-                    </div>
-
-                </div>
-            </div>
-            <div class="preview">
-                <div id="image_cont" class="template-container">
-                    <div class="pump-logo">
-                        <img :src="logo" class="pumpLogo" :class="{indianoil:logo.indexOf('indianoil')!==-1}">
-                        <img v-if="bankPrint" v-for="i in [0,1,2,3]" class="sidelogo" :class="['h'+i]" src="static/images/side-logo.webp">
-                    </div>
-                    <div class="template-content">
-                        <div class="welcome info-block" v-text="topMsg"></div>
-                        <div class="info-block address" id="address">
-                            <span class="data">
-                                <template v-for="line in address">
-                                    {{line}}<br />
-                                </template>
-                            </span>
-                        </div>
-                        <div class="info-block">
-                            <template v-for="item in billOptions">
-                                <div class="line-item" v-if="item.name.length>0">
-                                    <span class="label">{{item.name}}</span>
-                                    <span class="separator">:</span>
-                                    <span class="data">{{item.value}}</span>
+                            <div class="form-group">
+                                <span>Font</span>
+                                <select class="form-input" v-model="font">
+                                    <option v-for="opt in fontOptions" :value="opt.value">{{opt.name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <span>Message</span>
+                                <input type="text" class="form-input" v-model="topMsg">
+                            </div>
+                            <div class="form-group">
+                                <span>Footer</span>
+                                <input type="text" class="form-input" v-model="footer">
+                            </div>
+                            <template v-for="line,i in address">
+                                <div class="form-group">
+                                    <span>Address Line {{i}}</span>
+                                    <input type="text" class="form-input" v-model="line">
+                                    <div class="changeWrap">
+                                        <span class="changeIco" @click="address.splice(0,1)">-</span>
+                                        <span class="changeIco" @click="address.splice(i+1,0,'')">+</span>
+                                    </div>
                                 </div>
-                                <br v-else />
                             </template>
                         </div>
-                        <div class="footer" v-text="footer"></div>
+                    </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Enter Data</div>
+                        <div class="panel-body">
+                            <template v-for="inp,i in billOptions">
+                                <div v-if="inp.name.length>0" class="form-group">
+                                    <input type="text" class="form-label" v-model="inp.name" />
+                                    <input type="text" class="form-input" v-model="inp.value" :class="[{disabled:inp.key=='amount'}]" :disabled="inp.key=='amount'">
+                                    <div class="changeWrap">
+                                        <span class="changeIco" @click="billOptions.splice(i,1)">-</span>
+                                        <span class="changeIco" @click="billOptions.splice(i+1,0,{name:'Key',value:''})">+</span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
                     </div>
                 </div>
-            </div>
+                <div class="preview">
+                    <div id="image_cont" class="template-container">
+                        <div class="pump-logo">
+                            <img :src="logo" class="pumpLogo" :class="{indianoil:logo.indexOf('indianoil')!==-1}">
+                            <img v-if="bankPrint" v-for="i in [0,1,2,3]" class="sidelogo" :class="['h'+i]" src="static/images/side-logo.webp">
+                        </div>
+                        <div class="template-content">
+                            <div class="welcome info-block" v-text="topMsg"></div>
+                            <div class="info-block address" id="address">
+                                <span class="data">
+                                    <template v-for="line in address">
+                                        {{line}}<br />
+                                    </template>
+                                </span>
+                            </div>
+                            <div class="info-block">
+                                <template v-for="item in billOptions">
+                                    <div class="line-item" v-if="item.name.length>0">
+                                        <span class="label">{{item.name}}</span>
+                                        <span class="separator">:</span>
+                                        <span class="data">{{item.value}}</span>
+                                    </div>
+                                    <br v-else />
+                                </template>
+                            </div>
+                            <div class="footer" v-text="footer"></div>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </section>
     </div>
 
@@ -164,16 +175,16 @@
                 return {
                     toasts: [
                     ],
-                    showDriver: false,
-                    driver:{
-                        name:"P.Kumaran",
-                        amt:"10,000",
-                        amtTxt:"Ten Thousand",
-                        owner:"A. Hari Prasandh",
-                        month:"Oct 2024",
-                        place:"Chennai",
-                        date:"29/01/24",
-                        sign:"Kuma___"
+                    tab:"fuel",
+                    driver: {
+                        name: "P.Kumaran",
+                        amt: "10,000",
+                        amtTxt: "Ten Thousand",
+                        owner: "",
+                        month: "Oct 2024",
+                        place: "Chennai",
+                        date: "29/01/24",
+                        sign: "Kuma___"
                     },
                     topMsg: "Welcomes You",
                     footer: "Thank You! Please Visit Again..",
@@ -340,7 +351,7 @@
                     var dt = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
                     return dt;
                 },
-                generateDriver(){
+                generateDriver() {
                     let name = `${this.driver.month}.png`;
                     var node = document.getElementById('driver_cont');
                     domtoimage.toPng(node)
