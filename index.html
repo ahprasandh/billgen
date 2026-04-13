@@ -16,18 +16,15 @@
 
 <body>
     <div id="app" class="app night">
-
-
-
         <section class="headband">
             <div class="card tabs">
                 <input id="tab-1" type="radio" class="tab tab-selector" v-model="tab" name="tab" value="fuel" />
                 <label for="tab-1" class="tab tab-primary">Fuel Bill</label>
-                <input id="tab-4" type="radio" class="tab tab-selector" v-model="tab" name="tab" value="driver"/>
+                <input id="tab-4" type="radio" class="tab tab-selector" v-model="tab" name="tab" value="driver" />
                 <label for="tab-4" class="tab tab-success">Driver Receipt</label>
                 <div class="glider"></div>
             </div>
-            
+
             <button class="glow genBut" @click.stop="tab=='driver'?generateDriver():generate()">Generate Receipt</button>
             <button class="down genBut viewBil" :class="{available:toasts.length!==0}" @click="showDownloads=true">View Bills ({{downloads.length}})</button>
         </section>
@@ -175,7 +172,7 @@
                 return {
                     toasts: [
                     ],
-                    tab:"fuel",
+                    tab: "fuel",
                     driver: {
                         name: "P.Kumaran",
                         amt: "10,000",
