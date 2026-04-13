@@ -190,7 +190,7 @@ body .press {
   color: var(--color);
 }
 
-.headBand{
+.headband{
   height: 40px;
 }
 
@@ -739,7 +739,7 @@ body .press {
 }
 
 .driverAmtText {
-  width: 502px;
+  width: 225px;
 }
 
 .driverOwner {
@@ -760,15 +760,21 @@ body .press {
 
 .signature {
   position: absolute;
-  right: 70px;
-  top: 195px;
+    left: 85px;
+    top: 300px;
+}
+
+.eSignature {
+  position: absolute;
+  right: 85px;
+  top: 368px;
 }
 
 .signature .stamp {
   height: 70px;
 }
 
-.signature .signInp {
+.signature .signInp,.eSignature .signInp {
   position: relative;
     font-size: 18px;
     top: 50px;
@@ -777,6 +783,10 @@ body .press {
     padding: 0;
     transform: rotate(-7deg);
     width: 100px;
+}
+.eSignature .signInp{
+  top:0;
+  left: 10px;
 }
 .tabs {
   text-align: left;
